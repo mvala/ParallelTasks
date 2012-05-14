@@ -1,0 +1,74 @@
+# -*- mode: cmake -*-
+# - Try to find XROOTD
+# Once done this will define
+#
+#  XROOTD_FOUND - system has XROOTD
+#  XROOTD_INCLUDE_DIR - the XROOTD include directory
+#  XROOTD_LIBRARIES - The libraries needed to use XROOTD
+
+MESSAGE(STATUS "Looking for xrootd ... ")
+
+if (XROOTD_INCLUDE_DIR AND XROOTD_LIBRARIES)
+  SET (XROOTD_INCLUDE_DIR XROOTD_INCLUDE_DIR-NOTFOUND)
+  SET (XROOTD_LIB XROOTD_LIB-NOTFOUND)
+endif (XROOTD_INCLUDE_DIR AND XROOTD_LIBRARIES)
+
+# SET(MY_XROOTD_DIR $ENV{XROOTD_DIR})
+
+MESSAGE(STATUS "Checking XrdVersion.hh ...")
+FIND_PATH(XROOTD_INCLUDE_DIR
+  NAMES XrdVersion.hh
+  PATHS $ENV{XROOTD_DIR}/include/xrootd /usr/local/include/xrootd  NO_DEFAULT_PATH
+)
+if (XROOTD_INCLUDE_DIR)
+    MESSAGE(STATUS "Found ${XROOTD_INCLUDE_DIR}/XrdVersion.hh")
+endif (XROOTD_INCLUDE_DIR)
+
+MESSAGE(STATUS "Checking lib Xrd ...")
+FIND_LIBRARY(XROOTD_LIB 
+  NAMES Xrd
+  PATHS $ENV{XROOTD_DIR}/lib $ENV{XROOTD_DIR}/lib64 /usr/local/lib NO_DEFAULT_PATH
+)
+if (XROOTD_LIB)
+    MESSAGE(STATUS "Found lib ${XROOTD_LIB}")
+endif (XROOTD_LIB)
+
+MESSAGE(STATUS "Checking xrdcp ...")
+FIND_PROGRAM(XROOTD_XRDCP NAME xrdcp
+  PATHS
+  $ENV{XROOTD_DIR}/bin
+  /usr/local/bin
+  /usr/bin
+  /bin
+  NO_DEFAULT_PATH
+)
+
+if (XROOTD_XRDCP)
+    MESSAGE(STATUS "Found xrdcp in ${XROOTD_XRDCP}")
+endif (XROOTD_XRDCP)
+
+SET(XROOTD_LIBRARIES ${XROOTD_LIB})
+
+if (XROOTD_XRDCP)
+   set(XROOTD_FOUND TRUE)
+endif (XROOTD_XRDCP)
+
+# if (XROOTD_INCLUDE_DIR AND XROOTD_LIBRARIES AND XROOTD_XRDCP)
+#    set(XROOTD_FOUND TRUE)
+# endif (XROOTD_INCLUDE_DIR AND XROOTD_LIBRARIES AND XROOTD_XRDCP)
+
+if (XROOTD_FOUND)
+
+	MESSAGE(STATUS "Found xrootd ...")
+#  TODO find out if it can be before LD_LIBRARY_PATH
+    SET(LD_LIBRARY_PATH ${LD_LIBRARY_PATH} ${XROOTD_LIBRARY_DIR})
+#     SET(LD_LIBRARY_PATH ${LD_LIBRARY_PATH} ${XROOTD_LIB_PATH})
+    set(HAS_XROOTD 1)
+else (XROOTD_FOUND)
+  set(HAS_XROOTD 0)
+  if (XROOTD_FIND_REQUIRED)
+    MESSAGE(STATUS "$XROOTD_DIR is probably not set. Make sure that you set $XROOTD_DIR !!!")
+    MESSAGE(FATAL_ERROR "Looking for xrootd ... - Not found ")
+  endif (XROOTD_FIND_REQUIRED)
+#     MESSAGE(STATUS "Not Found AppMon ...")
+endif (XROOTD_FOUND)

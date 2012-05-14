@@ -1,0 +1,33 @@
+
+set(SRCS
+AliParallelTask.cxx
+AliParallelTaskManager.cxx
+)
+
+set(INCLUDE_DIRECTORIES
+  ${CMAKE_SOURCE_DIR}/src
+  ${ROOT_INCLUDE_DIR}
+  ${ALIEN_INCLUDE_DIR}
+  ${APPMON_INCLUDE_DIR}
+)
+include_directories( ${INCLUDE_DIRECTORIES})
+
+
+set(LINK_DIRECTORIES
+  ${CMAKE_SOURCE_DIR}/src
+  ${ROOT_LIBRARY_DIR}
+  ${ALIEN_LIBRARIES}
+  ${APPMON_LIBRARIES}
+)
+link_directories( ${LINK_DIRECTORIES})
+
+String(REPLACE ".cxx" ".h" HDRS "${SRCS}")
+
+MESSAGE(STATUS " ${ROOT_LIBRARIES}")
+add_library(ParallelTasks SHARED ${SRCS} ${HDRS})
+target_link_libraries(ParallelTasks ${ROOT_LIBRARIES} ${ALIEN_LIB} ${APPMON_LIB})
+
+install(TARGETS ParallelTasks
+RUNTIME DESTINATION bin COMPONENT RUNTIME
+LIBRARY DESTINATION lib COMPONENT RUNTIME
+ARCHIVE DESTINATION lib COMPONENT DEVELOPMENT)

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MY_DIR="$(dirname $(dirname $(readlink -m $0)))"
-cd $MY_DIR/ParalleTasks
+MY_DIR="$(dirname $(readlink -m $0))"
+cd $MY_DIR/ParallelTasks
 make
 cd $MY_DIR
-root Test.C
+root -b Test.C

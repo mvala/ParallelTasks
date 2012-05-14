@@ -8,7 +8,7 @@
 
 void Test(Bool_t runParallel = kTRUE,Long64_t base=1e8) {
 
-   gSystem->SetDynamicPath(Form("%s/ParalleTasks/:%s", gSystem->pwd(),gSystem->GetDynamicPath()));
+   gSystem->SetDynamicPath(Form("%s/ParallelTasks/:%s", gSystem->pwd(),gSystem->GetDynamicPath()));
 
    gSystem->Load("libThread.so");
    gSystem->Load("libHist.so");
